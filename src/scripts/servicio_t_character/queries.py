@@ -106,6 +106,72 @@ class Query(Connection):
                 print(objeto_characters)
 
                 return objeto_characters
+            
+    def search_character_by_gender(self, gender):
+
+        query = """
+            SELECT * FROM t_character WHERE gender = %s ORDER BY id_character ASC
+        """
+
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, [gender])
+
+                response = cursor.fetchall()
+
+                print(response)
+                print(cursor.description)
+
+                columnas = [columna.name for columna in cursor.description or []]
+
+                # objeto_pk = []
+                # for tupla in response:
+                #     obj = {}
+                #     for index, item in enumerate(tupla):
+                #         obj[columnas[index]] = item
+                #     objeto_pk.append(obj)
+                objeto_characters = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in response
+                ]
+
+                print(objeto_characters)
+
+                return objeto_characters
+            
+    def search_character_by_specie(self, specie):
+
+        query = """
+            SELECT * FROM t_character WHERE species = %s ORDER BY id_character ASC
+        """
+
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, [specie])
+
+                response = cursor.fetchall()
+
+                print(response)
+                print(cursor.description)
+
+                columnas = [columna.name for columna in cursor.description or []]
+
+                # objeto_pk = []
+                # for tupla in response:
+                #     obj = {}
+                #     for index, item in enumerate(tupla):
+                #         obj[columnas[index]] = item
+                #     objeto_pk.append(obj)
+                objeto_characters = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in response
+                ]
+
+                print(objeto_characters)
+
+                return objeto_characters
 
     # Metodo POST
     def add_character(self, id_character: int, name_character: str, status: bool, gender: str, species: str):

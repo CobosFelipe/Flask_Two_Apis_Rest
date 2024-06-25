@@ -22,8 +22,18 @@ servicio_t_character.add_url_rule(
     methods=["GET"]
 )
 servicio_t_character.add_url_rule(
-    "/get/<name_character>",
+    "/get/by_name/<name_character>",
     view_func=controllers.get_characters_by_name,
+    methods=["GET"]
+)
+servicio_t_character.add_url_rule(
+    "/get/by_gender/<gender>",
+    view_func=controllers.get_characters_by_gender,
+    methods=["GET"]
+)
+servicio_t_character.add_url_rule(
+    "/get/by_specie/<specie>",
+    view_func=controllers.get_characters_by_specie,
     methods=["GET"]
 )
 # Servicios para Metodos POST
