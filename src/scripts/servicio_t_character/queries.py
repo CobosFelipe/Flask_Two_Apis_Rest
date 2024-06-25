@@ -6,16 +6,16 @@ from src.scripts.connection import Connection
 class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
     # Metodos GET
-    def search_character(self):
+    def search_character(self, offset, limit):
 
         query = """
-            SELECT * FROM t_character ORDER BY id_character ASC
+            SELECT * FROM t_character ORDER BY id_character ASC OFFSET %s LIMIT %s 
         """
 
         # contextos de python
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query)
+                cursor.execute(query, [int(offset), int(limit)])
 
                 response = cursor.fetchall()
 

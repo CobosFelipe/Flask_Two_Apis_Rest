@@ -8,7 +8,9 @@ from .queries import Query
 # Metodos GET
 def get_characters():
     try:
-        results = Query().search_character()
+        limit = request.args.get('limit', 10)
+        offset = request.args.get('offset', 0)
+        results = Query().search_character(offset, limit)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
