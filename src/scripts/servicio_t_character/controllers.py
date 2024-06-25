@@ -12,7 +12,7 @@ class ClasePokemon:
     def __init__(self, id_character, name, status, gender, species) -> None:
         pass
     
-
+# Metodos GET
 def get_characters():
     try:
         results = Query().search_character()
@@ -33,6 +33,47 @@ def get_characters():
         "obj": results,
     }
 
+def get_characters_by_id(id_character):
+    try:
+        results = Query().search_character_by_id(id_character)
+    except psycopg2.Error as db_error:
+        return {
+            "msg": f"DB error: {str(db_error)}",
+            "codigo": 0,
+            "status": False,
+            "obj": {},
+        }
+    except Exception as exc:
+        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
+
+    return {
+        "msg": "Consulta satisfactoria",
+        "codigo": 0,
+        "status": True,
+        "obj": results,
+    }
+
+def get_characters_by_name(name_character):
+    try:
+        results = Query().search_character_by_name(name_character)
+    except psycopg2.Error as db_error:
+        return {
+            "msg": f"DB error: {str(db_error)}",
+            "codigo": 0,
+            "status": False,
+            "obj": {},
+        }
+    except Exception as exc:
+        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
+
+    return {
+        "msg": "Consulta satisfactoria",
+        "codigo": 0,
+        "status": True,
+        "obj": results,
+    }
+
+# Metodos POST
 def add_characters():
     try:
         entrada = request.json

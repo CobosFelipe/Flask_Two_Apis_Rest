@@ -7,9 +7,6 @@ class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
     # Metodos GET
     def search_character(self):
-        """
-        It does nothing.
-        """
 
         query = """
             SELECT * FROM t_character ORDER BY id_character ASC
@@ -19,6 +16,74 @@ class Query(Connection):
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
                 cursor.execute(query)
+
+                response = cursor.fetchall()
+
+                print(response)
+                print(cursor.description)
+
+                columnas = [columna.name for columna in cursor.description or []]
+
+                # objeto_pk = []
+                # for tupla in response:
+                #     obj = {}
+                #     for index, item in enumerate(tupla):
+                #         obj[columnas[index]] = item
+                #     objeto_pk.append(obj)
+                objeto_characters = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in response
+                ]
+
+                print(objeto_characters)
+
+                return objeto_characters
+            
+    def search_character_by_id(self, id_character):
+
+        query = """
+            SELECT * FROM t_character WHERE id_character = %s
+        """
+
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, [id_character])
+
+                response = cursor.fetchall()
+
+                print(response)
+                print(cursor.description)
+
+                columnas = [columna.name for columna in cursor.description or []]
+
+                # objeto_pk = []
+                # for tupla in response:
+                #     obj = {}
+                #     for index, item in enumerate(tupla):
+                #         obj[columnas[index]] = item
+                #     objeto_pk.append(obj)
+                objeto_characters = [
+                    {columnas[index]: item for index, item in enumerate(tupla)}
+                    for tupla in response
+                ]
+
+                print(objeto_characters)
+
+                return objeto_characters
+            
+    def search_character_by_name(self, name_character):
+
+        primer_nombre = name_character.split()[0]
+
+        query = """
+            SELECT * FROM t_character WHERE name_character LIKE %s
+        """
+
+        # contextos de python
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, [primer_nombre])
 
                 response = cursor.fetchall()
 
