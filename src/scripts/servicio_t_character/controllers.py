@@ -12,37 +12,6 @@ class ClasePokemon:
     def __init__(self, id_character, name, status, gender, species) -> None:
         pass
     
-    datos_organizados = {
-        "habilidaes": [
-            "etc"
-        ]
-    }
-
-def endpoint_1():
-    """Endpoint de ejemplo 1"""
-    print("Ejecutano controlador")
-
-    if not ("id_character" in request.args.keys() or "name" in request.args.keys()):
-        return "No se encontraron las llaves necesarias"
-
-    id_character = request.args.get("id_character")
-    name = request.args.get("name")
-    status = request.get("status")
-    gender = request.get("gender")
-    species = request.get("species")
-
-    datos_pokemon = ClasePokemon(id_character, name, status, gender, species)
-
-    return datos_pokemon.datos_organizados
-
-
-def endpoint_2():
-    """Endpoint de ejemplo 1"""
-
-    datos_pokemon = Clase_t_character()
-    datos_pokemon.validar(request.args)
-
-    return datos_pokemon.datos_organizados
 
 def get_characters():
     try:
@@ -71,7 +40,7 @@ def add_characters():
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().add_character(entrada.get("id_character"), entrada.get("name"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
+        Query().add_character(entrada.get("id_character"), entrada.get("name_character"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -84,6 +53,31 @@ def add_characters():
 
     return {
         "msg": "Se agrego satisfactoriamente",
+        "codigo": 0,
+        "status": True,
+        "obj": {},
+    }
+
+def edit_character(id_character):
+    try:
+        entrada = request.json
+    except Exception as exc:
+        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
+    
+    try:
+        Query().edit_character(id_character, entrada.get("name_character"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
+    except psycopg2.Error as db_error:
+        return {
+            "msg": f"DB error: {str(db_error)}",
+            "codigo": 0,
+            "status": False,
+            "obj": {},
+        }
+    except Exception as exc:
+        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
+
+    return {
+        "msg": "Se modificó satisfactoriamente",
         "codigo": 0,
         "status": True,
         "obj": {},

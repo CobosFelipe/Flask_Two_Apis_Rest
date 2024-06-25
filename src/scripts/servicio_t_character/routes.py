@@ -22,7 +22,8 @@ servicio_t_character.add_url_rule(
     methods=["POST"]
 )
 servicio_t_character.add_url_rule(
-    "/characters",
-    view_func=controllers.crud_pokemones,
-    methods=["GET", "POST"]
+    "/put/<int:id_character>",
+    view_func=controllers.edit_character,
+    methods=["PUT"]
 )
+

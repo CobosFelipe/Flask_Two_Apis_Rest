@@ -12,9 +12,7 @@ class Query(Connection):
         """
 
         query = """
-            SELECT tc.*, te.* FROM t_character tc
-	        INNER JOIN union_char_episode uce on tc.id_character = uce.id_character
-	        INNER JOIN t_episodes te on uce.id_episode = te.id_episode
+            SELECT * FROM t_character
         """
 
         # contextos de python
@@ -55,4 +53,15 @@ class Query(Connection):
             with conn.cursor() as cursor:
                 print(cursor.mogrify(query, [id_character, name_character, status, gender, species]).decode())
                 cursor.execute(query, [id_character, name_character, status, gender, species])
+
+    def edit_character(self, id_character: str, name_character: str, status: bool, gender: str, species: str):
+        query = """
+            UPDATE t_character
+            SET name_character=%s, status=%s, gender=%s, species=%s
+            WHERE id_character=%s;
+        """
+
+        with self._open_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, [name_character, status, gender, species, id_character])
 
