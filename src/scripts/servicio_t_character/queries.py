@@ -5,14 +5,14 @@ from src.scripts.connection import Connection
 
 class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
-
+    # Metodos GET
     def search_character(self):
         """
         It does nothing.
         """
 
         query = """
-            SELECT * FROM t_character
+            SELECT * FROM t_character ORDER BY id_character ASC
         """
 
         # contextos de python
@@ -42,6 +42,7 @@ class Query(Connection):
 
                 return objeto_characters
 
+    # Metodo POST
     def add_character(self, id_character: int, name_character: str, status: bool, gender: str, species: str):
         query = """
             INSERT INTO t_character
@@ -54,6 +55,7 @@ class Query(Connection):
                 print(cursor.mogrify(query, [id_character, name_character, status, gender, species]).decode())
                 cursor.execute(query, [id_character, name_character, status, gender, species])
 
+    # Metodo PUT
     def edit_character(self, id_character: str, name_character: str, status: bool, gender: str, species: str):
         query = """
             UPDATE t_character
