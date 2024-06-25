@@ -18,7 +18,7 @@ servicio_t_character.add_url_rule(
 )
 servicio_t_character.add_url_rule(
     "/post",
-    view_func=controllers.endpoint_2,
+    view_func=controllers.add_characters,
     methods=["POST"]
 )
 servicio_t_character.add_url_rule(

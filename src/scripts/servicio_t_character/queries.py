@@ -44,15 +44,15 @@ class Query(Connection):
 
                 return objeto_characters
 
-    def add_character(self, id_character: int, name: str, status: bool, gender: str, species: str):
+    def add_character(self, id_character: int, name_character: str, status: bool, gender: str, species: str):
         query = """
             INSERT INTO t_character
-            (id_character, name, status, gender, species)
+            (id_character, name_character, status, gender, species)
             VALUES(%s, %s, %s, %s, %s);
         """
 
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                print(cursor.mogrify(query, [id_character, name, status, gender, species]).decode())
-                cursor.execute(query, [id_character, name, status, gender, species])
+                print(cursor.mogrify(query, [id_character, name_character, status, gender, species]).decode())
+                cursor.execute(query, [id_character, name_character, status, gender, species])
 
