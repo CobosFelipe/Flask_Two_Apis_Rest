@@ -6,9 +6,9 @@ import psycopg2
 from .queries import Query
     
 # Metodos GET
-def get_characters():
+def get_pokemon():
     try:
-        results = Query().search_character()
+        results = Query().search_pokemon()
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -26,9 +26,9 @@ def get_characters():
         "obj": results,
     }
 
-def get_characters_by_id(id_character):
+def get_pokemon_by_id(id_pokemon):
     try:
-        results = Query().search_character_by_id(id_character)
+        results = Query().search_pokemon_by_id(id_pokemon)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -46,9 +46,9 @@ def get_characters_by_id(id_character):
         "obj": results,
     }
 
-def get_characters_by_name(name_character):
+def get_pokemon_by_name(pokemon_name):
     try:
-        results = Query().search_character_by_name(name_character)
+        results = Query().search_pokemon_by_name(pokemon_name)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -66,9 +66,9 @@ def get_characters_by_name(name_character):
         "obj": results,
     }
 
-def get_characters_by_gender(gender):
+def get_pokemon_by_height(height):
     try:
-        results = Query().search_character_by_gender(gender)
+        results = Query().search_pokemon_by_height(height)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -86,9 +86,9 @@ def get_characters_by_gender(gender):
         "obj": results,
     }
 
-def get_characters_by_specie(specie):
+def get_pokemon_by_weight(weight):
     try:
-        results = Query().search_character_by_specie(specie)
+        results = Query().search_pokemon_by_weight(weight)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -107,14 +107,14 @@ def get_characters_by_specie(specie):
     }
 
 # Metodos POST
-def add_characters():
+def add_pokemon():
     try:
         entrada = request.json
     except Exception as exc:
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().add_character(entrada.get("id_character"), entrada.get("name_character"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
+        Query().add_pokemon(entrada.get("id_pokemon"), entrada.get("pokemon_name"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -132,14 +132,14 @@ def add_characters():
         "obj": {},
     }
 
-def edit_character(id_character):
+def edit_pokemon(id_pokemon):
     try:
         entrada = request.json
     except Exception as exc:
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().edit_character(id_character, entrada.get("name_character"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
+        Query().edit_pokemon(id_pokemon, entrada.get("pokemon_name"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -158,10 +158,10 @@ def edit_character(id_character):
     }
 
 
-def crud_characters():
+def crud_pokemones():
     if request.method == "GET":
-        return get_characters()
+        return get_pokemon()
     if request.method == "POST":
-        return add_characters()
+        return add_pokemon()
     if request.method == "PUT":
-        return edit_character()
+        return edit_pokemon()
