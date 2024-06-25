@@ -4,7 +4,6 @@ from flask import Blueprint
 
 from . import controllers
 
-
 servicio_t_pokemon = Blueprint(
     "servicio_t_pokemon",
     __name__,
@@ -39,12 +38,12 @@ servicio_t_pokemon.add_url_rule(
 # Servicios para Metodos POST
 servicio_t_pokemon.add_url_rule(
     "/post",
-    view_func=controllers.add_pokemon,
+    view_func=controllers.add_pokemons,
     methods=["POST"]
 )
 # Servicios para Metodos PUT
 servicio_t_pokemon.add_url_rule(
-    "/put/<int:id_character>",
+    "/put/<int:id_pokemon>",
     view_func=controllers.edit_pokemon,
     methods=["PUT"]
 )

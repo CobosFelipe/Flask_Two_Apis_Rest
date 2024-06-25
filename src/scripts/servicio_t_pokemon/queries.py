@@ -6,16 +6,16 @@ from src.scripts.connection import Connection
 class Query(Connection):
     """ > The Query class is a subclass of the Connection class """
     # Metodos GET
-    def search_pokemon(self):
+    def search_pokemon(self, limit, offset):
 
         query = """
-            SELECT * FROM t_pokemon ORDER BY id_pokemon ASC
+            SELECT * FROM t_pokemon ORDER BY id_pokemon ASC OFFSET %s LIMIT %s 
         """
 
         # contextos de python
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query)
+                cursor.execute(query, [int(offset), int(limit)])
 
                 response = cursor.fetchall()
 
@@ -38,6 +38,7 @@ class Query(Connection):
                 print(objeto_pokemons)
 
                 return objeto_pokemons
+
             
     def search_pokemon_by_id(self, id_pokemon):
 
@@ -174,27 +175,27 @@ class Query(Connection):
                 return objeto_pokemons
 
     # Metodo POST
-    def add_pokemon(self, id_pokemon: int, pokemon_name: str, height: int, weight: int, abilities: int):
+    def add_pokemon(self, id_pokemon: int, pokemon_name: str, height: int, weight: int, abilities: int, id_character: int):
         query = """
             INSERT INTO t_pokemon
-            (id_pokemon, pokemon_name, height, weight, abilities)
-            VALUES(%s, %s, %s, %s, %s);
+            (id_pokemon, pokemon_name, height, weight, abilities, id_character)
+            VALUES(%s, %s, %s, %s, %s, %s);
         """
 
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                print(cursor.mogrify(query, [id_pokemon, pokemon_name, height, weight, abilities]).decode())
-                cursor.execute(query, [id_pokemon, pokemon_name, height, weight, abilities])
+                print(cursor.mogrify(query, [id_pokemon, pokemon_name, height, weight, abilities, id_character]).decode())
+                cursor.execute(query, [id_pokemon, pokemon_name, height, weight, abilities, id_character])
 
     # Metodo PUT
-    def edit_pokemon(self, id_pokemon: str, pokemon_name: str, height: int, weight: int, abilities: int):
+    def edit_pokemon(self, id_pokemon: str, pokemon_name: str, height: int, weight: int, abilities: int, id_character: int):
         query = """
             UPDATE t_pokemon
-            SET pokemon_name=%s, height=%s, weight=%s, abilities=%s
+            SET pokemon_name=%s, height=%s, weight=%s, abilities=%s, id_character=%s
             WHERE id_pokemon=%s;
         """
 
         with self._open_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query, [pokemon_name, height, weight, abilities, id_pokemon])
+                cursor.execute(query, [pokemon_name, height, weight, abilities, id_character, id_pokemon])
 

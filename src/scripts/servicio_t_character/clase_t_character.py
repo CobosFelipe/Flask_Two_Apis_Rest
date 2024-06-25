@@ -7,7 +7,7 @@ class Clase_t_character:
     """ Clase de ejemplo """
     def __init__(self) -> None:
         self.id_character = None
-        self.nane = None
+        self.character_name = None
         self.status = None
         self.gender = None
         self.species = None

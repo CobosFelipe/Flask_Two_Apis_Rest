@@ -8,7 +8,29 @@ from .queries import Query
 # Metodos GET
 def get_pokemon():
     try:
-        results = Query().search_pokemon()
+        limit = request.args.get('limit', 10)
+        offset = request.args.get('offset', 0)
+        results = Query().search_pokemon(limit, offset)
+    except psycopg2.Error as db_error:
+        return {
+            "msg": f"DB error: {str(db_error)}",
+            "codigo": 0,
+            "status": False,
+            "obj": {},
+        }
+    except Exception as exc:
+        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
+
+    return {
+        "msg": "Consulta satisfactoria",
+        "codigo": 0,
+        "status": True,
+        "obj": results,
+    }
+
+def get_pokemon_pagination(limit, offset):
+    try:
+        results = Query().search_pokemon_pagination(limit, offset)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -107,14 +129,14 @@ def get_pokemon_by_weight(weight):
     }
 
 # Metodos POST
-def add_pokemon():
+def add_pokemons():
     try:
         entrada = request.json
     except Exception as exc:
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().add_pokemon(entrada.get("id_pokemon"), entrada.get("pokemon_name"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
+        Query().add_pokemon(entrada.get("id_pokemon"), entrada.get("pokemon_name"), entrada.get("height"), entrada.get("weight"), entrada.get("abilities"), entrada.get("id_character"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -139,7 +161,7 @@ def edit_pokemon(id_pokemon):
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().edit_pokemon(id_pokemon, entrada.get("pokemon_name"), entrada.get("status"), entrada.get("gender"), entrada.get("species"))
+        Query().edit_pokemon(id_pokemon, entrada.get("pokemon_name"), entrada.get("height"), entrada.get("weight"), entrada.get("abilities"), entrada.get("id_character"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -162,6 +184,6 @@ def crud_pokemones():
     if request.method == "GET":
         return get_pokemon()
     if request.method == "POST":
-        return add_pokemon()
+        return add_pokemons()
     if request.method == "PUT":
         return edit_pokemon()
