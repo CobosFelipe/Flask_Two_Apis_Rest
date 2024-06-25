@@ -6,11 +6,11 @@ import psycopg2
 from .queries import Query
     
 # Metodos GET
-def get_pokemon():
+def get_ability():
     try:
         limit = request.args.get('limit', 10)
         offset = request.args.get('offset', 0)
-        results = Query().search_pokemon(limit, offset)
+        results = Query().search_ability(limit, offset)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -28,10 +28,9 @@ def get_pokemon():
         "obj": results,
     }
 
-
-def get_pokemon_by_id(id_pokemon):
+def get_ability_by_id(id_ability):
     try:
-        results = Query().search_pokemon_by_id(id_pokemon)
+        results = Query().search_ability_by_id(id_ability)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -49,9 +48,9 @@ def get_pokemon_by_id(id_pokemon):
         "obj": results,
     }
 
-def get_pokemon_by_name(pokemon_name):
+def get_ability_by_name(name):
     try:
-        results = Query().search_pokemon_by_name(pokemon_name)
+        results = Query().search_ability_by_name(name)
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -69,55 +68,16 @@ def get_pokemon_by_name(pokemon_name):
         "obj": results,
     }
 
-def get_pokemon_by_height(height):
-    try:
-        results = Query().search_pokemon_by_height(height)
-    except psycopg2.Error as db_error:
-        return {
-            "msg": f"DB error: {str(db_error)}",
-            "codigo": 0,
-            "status": False,
-            "obj": {},
-        }
-    except Exception as exc:
-        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
-
-    return {
-        "msg": "Consulta satisfactoria",
-        "codigo": 0,
-        "status": True,
-        "obj": results,
-    }
-
-def get_pokemon_by_weight(weight):
-    try:
-        results = Query().search_pokemon_by_weight(weight)
-    except psycopg2.Error as db_error:
-        return {
-            "msg": f"DB error: {str(db_error)}",
-            "codigo": 0,
-            "status": False,
-            "obj": {},
-        }
-    except Exception as exc:
-        return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
-
-    return {
-        "msg": "Consulta satisfactoria",
-        "codigo": 0,
-        "status": True,
-        "obj": results,
-    }
 
 # Metodos POST
-def add_pokemons():
+def add_ability():
     try:
         entrada = request.json
     except Exception as exc:
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().add_pokemon(entrada.get("id_pokemon"), entrada.get("pokemon_name"), entrada.get("height"), entrada.get("weight"), entrada.get("abilities"), entrada.get("id_character"))
+        Query().add_ability(entrada.get("id_ability"), entrada.get("name"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -135,14 +95,14 @@ def add_pokemons():
         "obj": {},
     }
 
-def edit_pokemon(id_pokemon):
+def edit_ability(id_ability):
     try:
         entrada = request.json
     except Exception as exc:
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().edit_pokemon(id_pokemon, entrada.get("pokemon_name"), entrada.get("height"), entrada.get("weight"), entrada.get("abilities"), entrada.get("id_character"))
+        Query().edit_pokemon(id_ability, entrada.get("name"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -163,8 +123,8 @@ def edit_pokemon(id_pokemon):
 
 def crud_pokemones():
     if request.method == "GET":
-        return get_pokemon()
+        return get_ability()
     if request.method == "POST":
-        return add_pokemons()
+        return add_ability()
     if request.method == "PUT":
-        return edit_pokemon()
+        return edit_ability()
