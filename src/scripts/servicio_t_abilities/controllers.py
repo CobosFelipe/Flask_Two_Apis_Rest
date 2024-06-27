@@ -11,6 +11,8 @@ def get_ability():
         limit = request.args.get('limit', 10)
         offset = request.args.get('offset', 0)
         results = Query().search_ability(limit, offset)
+        total = Query().search_ability(10000, 0)
+        print("Total datos:", len(total))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
@@ -102,7 +104,7 @@ def edit_ability(id_ability):
         return {"msg": str(exc), "codigo": 0, "status": False, "obj": {}}
     
     try:
-        Query().edit_pokemon(id_ability, entrada.get("name"))
+        Query().edit_ability(id_ability, entrada.get("name"))
     except psycopg2.Error as db_error:
         return {
             "msg": f"DB error: {str(db_error)}",
